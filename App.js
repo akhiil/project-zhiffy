@@ -15,70 +15,8 @@ import MessScreen from './src/screens/MessScreen';
 import mainScreen from './src/screens/mainScreen';
 import PaymentScreen from './src/screens/PaymentScreen';
 import tiffinScreen from './src/screens/TiffinScreen';
+import Zomato from './src/screens/zomato';
 
-
-// const switchNavigator = createSwitchNavigator({
-//   loginFlow: createStackNavigator({
-//     main: mainScreen,
-//     Signin: SigninScreen,
-//     Signup: SignupScreen
-
-//   }),
-//   mainFlow: createBottomTabNavigator({
-//     Home: {
-//       screen: HomeScreen,
-//       navigationOptions: {
-//         tabBarIcon: () => {
-//           return <AntDesign name="home" size={35} color="#4d2800"></AntDesign>;
-//         }
-//       }
-//     },
-//     Mess: {
-//       screen: MessScreen,
-//       navigationOptions: {
-//         tabBarIcon: () => {
-//           return <MaterialCommunityIcons name="food-fork-drink" size={35} color="#4d2800" />;
-//         }
-//       }
-//     },
-//     Tiffin: {
-//       screen: TiffinScreen,
-//       navigationOptions: {
-//         tabBarIcon: () => {
-//           return <MaterialCommunityIcons name="food" size={35} color="#4d2800" />;
-//         }
-//       }
-//     },
-//     Account: {
-//       screen: AccountScreen,
-//       navigationOptions: {
-//         tabBarIcon: () => {
-//           return <MaterialCommunityIcons name="account" size={35} color="#4d2800" />;
-//         }
-//       }
-//     }
-//   },
-//     {
-
-
-//       tabBarOptions: { showLabel: false, activeintColor: 'blue', inactiveintColor: 'red' }
-//     })
-// });
-
-// // way to remove top header
-// HomeScreen.navigationOptions = () => {
-//   return {
-//     headerShown: false
-//   };
-// };
-// mainScreen.navigationOptions = () => {
-//   return {
-//     headerShown: false
-//   };
-// };
-
-
-// export default createAppContainer(switchNavigator);
 
 const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
@@ -88,7 +26,7 @@ const switchNavigator = createSwitchNavigator({
   }),
   payment: PaymentScreen,
   mainFlow: createBottomTabNavigator({
-    Home: HomeScreen,
+    Home: Zomato,
     mess: MessScreen,
     tiffin: TiffinScreen,
     account: AccountScreen
@@ -97,7 +35,7 @@ const switchNavigator = createSwitchNavigator({
       defaultNavigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, horizontal, tintColor }) => {
           //  console.log(focused, horizontal, tintColor);
-          const iconColour = focused ? '#ffffe6' : 'green';
+          const iconColour = focused ? 'black' : 'gray';
           if (navigation.state.routeName === 'Home') {
             return <AntDesign name="home" size={35} color={iconColour} />
           } else if (navigation.state.routeName === 'mess') {
@@ -112,7 +50,7 @@ const switchNavigator = createSwitchNavigator({
           activeTintColor: '#2BEDBA',
           inactiveTintColor: 'gray',
           showLabel: false,
-          style: { backgroundColor: '#4d2800', paddingTop: 5 }
+          style: { backgroundColor: 'white', paddingTop: 5 }
         },
       })
     })
@@ -131,3 +69,94 @@ mainScreen.navigationOptions = () => {
 };
 
 export default createAppContainer(switchNavigator);
+
+// import React, { useEffect, useState } from 'react';
+// import {
+//   Text, View, StyleSheet, FlatList,
+//   Dimensions
+// } from 'react-native';
+// import axios from 'axios';
+
+// const phw = Dimensions.get('window').width;
+// const phh = Dimensions.get('window').height;
+
+// const App = () => {
+//   //const [getData,setGetData] = useState([{sno:1, name: "harry", points: 100}]);
+//   const [getData, setGetData] = useState([]);
+
+//   useEffect(() => {
+//     axios.get('http://www.kamaibook.com/rest/en/internroute', {
+//       headers: {
+//         'Authorization': "Bearer letswork"
+//       }
+//     })
+//       .then((res) => {
+//         console.log(res.data)
+//         setGetData([...res.data.data])
+//       })
+//       .catch((error) => {
+//         console.error(error)
+//         alert(error)
+//       })
+//   }, [])
+
+//   return (
+//     <>
+//       <View style={{ backgroundColor: 'lightgray', paddingVertical: '7%' }}>
+//         <View style={styles.header}>
+//           <Text style={styles.headerText}>Kamai Book</Text>
+//         </View>
+//         <View style={{ paddingHorizontal: 10 }}>
+//           <FlatList
+//             data={getData}
+//             keyExtractor={item => item.name}
+//             renderItem={({ item }) => {
+//               return (
+//                 <View style={styles.items}>
+//                   <View style={[styles.element, { width: '10%' }]}>
+//                     <Text style={{ color: '#343a45', fontSize: 18, fontFamily: 'cursive' }}>{item.sno}</Text>
+//                   </View>
+//                   <View style={[styles.element, { width: '70%' }]}>
+//                     <Text style={{ color: '#343a45', fontSize: 18, fontFamily: 'cursive' }}>{item.name}</Text>
+//                   </View>
+//                   <View style={[styles.element, { width: '20%' }]}>
+//                     <Text style={{ color: '#343a45', fontSize: 18, fontFamily: 'cursive' }}>{item.points}</Text>
+//                   </View>
+//                 </View>
+//               );
+//             }}
+//           />
+//         </View>
+//       </View>
+//     </>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   header: {
+//     backgroundColor: '#343a45',
+//     textAlign: 'center',
+//     padding: 15
+//   },
+//   headerText: {
+//     color: '#fff',
+//     fontWeight: 'bold',
+//     fontSize: 20,
+//     fontFamily: 'cursive'
+//   },
+//   items: {
+//     flexDirection: 'row',
+//   },
+//   element: {
+//     borderColor: '#343a45',
+//     borderWidth: 2,
+//     padding: 5,
+//     borderRadius: 5,
+//     backgroundColor: '#7e9190',
+//     marginVertical: 3,
+//     marginHorizontal: 2,
+//     textAlign: 'center'
+//   }
+// })
+
+// export default App;

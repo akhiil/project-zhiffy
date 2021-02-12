@@ -127,7 +127,7 @@ for (let i = dd; i <= numberOfDays; i++) {
             day = "fault";
     }
 
-    list.push({ date: `${i} ${mm}-${day}`, id: j, checkLunch: false, checkDinner: false });
+    list.push({ date: `${i} ${mm}-${day}`, id: j, checkLunch: false, checkDinner: false, foodLunch: '', foodDinner: '' });
     if (sun === 6) {
         sun = 0;
     }
@@ -221,7 +221,7 @@ for (let i = 1; i <= numberOfDays; i++) {
             day = "fault";
     }
 
-    list.push({ date: `${i} ${mm}-${day}`, id: j, checkLunch: false, checkDinner: false });
+    list.push({ date: `${i} ${mm}-${day}`, id: j, checkLunch: false, checkDinner: false, foodLunch: '', foodDinner: '' });
     if (sun === 6) {
         sun = 0;
     }
@@ -231,10 +231,8 @@ for (let i = 1; i <= numberOfDays; i++) {
     j++;
 }
 
-//let mealInfo = [];
-let mealName;
 
-class tiffinScreen extends Component {
+class messScreen extends Component {
     constructor() {
         super();
         this.state = {
@@ -249,10 +247,31 @@ class tiffinScreen extends Component {
         }
     }
 
+
+    giveAmount = (item) => {
+        switch (item) {
+            case "Roti-sabji":
+                return 30;
+            case "Chawal-dal":
+                return 35;
+            case "mach-bhat":
+                return 50;
+            case "murga-bhat":
+                return 60;
+            case "Litti-chokha":
+                return 25;
+            case "paneer-dosa":
+                return 55;
+        }
+    }
+
     checkLunchBox = (itemID) => {
         let temp = this.state.list;
-        temp[itemID].checkLunch = !temp[itemID].checkLunch
+        temp[itemID].checkLunch = !temp[itemID].checkLunch;
+        temp[itemID].foodLunch = temp[itemID].checkLunch ? this.state.selectedMeal : '';
         this.setState({ list: temp });
+
+        //  console.log(...list);
 
         let tempy = 0;
         for (let i = 0; i < list.length; i++) {
@@ -263,31 +282,50 @@ class tiffinScreen extends Component {
 
         let tempInfo = [];
         for (let i = 0; i < this.state.list.length; i++) {
-            if (this.state.list[i].checkLunch || this.state.list[i].checkDinner && this.state.mealId) {
+            if (this.state.list[i].checkLunch && this.state.selectedMeal) {
                 tempInfo.push({
                     date: this.state.list[i].date,
-                    ID: this.state.mealId,
-                    mealLunch: (this.state.list[i].checkLunch) ? 'Lunch' : null,
-                    mealDinner: (this.state.list[i].checkDinner) ? 'Dinner' : null,
-                    amount: parseInt(this.state.selectedMeal)
+                    ID: this.state.list[i].foodLunch,
+                    mealTime: 'Lunch',
+                    amount: this.giveAmount(this.state.list[i].foodLunch)
                 });
             }
         }
+
+
+        //   let tempInfo = [];
+        for (let i = 0; i < this.state.list.length; i++) {
+            if (this.state.list[i].checkDinner && this.state.selectedMeal) {
+                tempInfo.push({
+                    date: this.state.list[i].date,
+                    ID: this.state.list[i].foodDinner,
+                    mealTime: 'Dinner',
+                    amount: this.giveAmount(this.state.list[i].foodDinner)
+                });
+            }
+        }
+
         this.setState({ mealInfo: tempInfo });
 
 
-        console.log('yha se', ...this.state.mealInfo);
+        // console.log('yha se', ...this.state.mealInfo);
         let lunch = 0;
-        for (let i = 0; i < this.state.mealInfo.length; i++) {
-            if (this.state.mealInfo[i].mealLunch) lunch += this.state.mealInfo[i].amount;
+        let dinner = 0;
+        for (let i = 0; i < tempInfo.length; i++) {
+            if (tempInfo[i].mealTime === 'Lunch') lunch += tempInfo[i].amount;
+            if (tempInfo[i].mealTime === 'Dinner') dinner += tempInfo[i].amount;
         }
         this.setState({ amountLunch: lunch });
+        this.setState({ amountDinner: dinner });
     }
 
     checkDinnerBox = (itemID) => {
         let temp = this.state.list;
-        temp[itemID].checkDinner = !temp[itemID].checkDinner
+        temp[itemID].checkDinner = !temp[itemID].checkDinner;
+        temp[itemID].foodDinner = temp[itemID].checkDinner ? this.state.selectedMeal : '';
         this.setState({ list: temp });
+
+        console.log(...list);
 
         let tempy = 0;
         for (let i = 0; i < list.length; i++) {
@@ -298,24 +336,40 @@ class tiffinScreen extends Component {
 
         let tempInfo = [];
         for (let i = 0; i < this.state.list.length; i++) {
-            if (this.state.list[i].checkDinner || this.state.list[i].checkLunch && this.state.mealId) {
+            if (this.state.list[i].checkLunch && this.state.selectedMeal) {
                 tempInfo.push({
                     date: this.state.list[i].date,
-                    ID: this.state.mealId,
-                    mealLunch: (this.state.list[i].checkLunch) ? 'Lunch' : null,
-                    mealDinner: (this.state.list[i].checkDinner) ? 'Dinner' : null,
-                    amount: parseInt(this.state.selectedMeal)
+                    ID: this.state.list[i].foodLunch,
+                    mealTime: 'Lunch',
+                    amount: this.giveAmount(this.state.list[i].foodLunch)
                 });
             }
         }
+
+
+        //   let tempInfo = [];
+        for (let i = 0; i < this.state.list.length; i++) {
+            if (this.state.list[i].checkDinner && this.state.selectedMeal) {
+                tempInfo.push({
+                    date: this.state.list[i].date,
+                    ID: this.state.list[i].foodDinner,
+                    mealTime: 'Dinner',
+                    amount: this.giveAmount(this.state.list[i].foodDinner)
+                });
+            }
+        }
+
         this.setState({ mealInfo: tempInfo });
 
 
-        console.log('yha se', ...this.state.mealInfo);
+        //  console.log('yha se', ...this.state.mealInfo);
+        let lunch = 0;
         let dinner = 0;
-        for (let i = 0; i < this.state.mealInfo.length; i++) {
-            if (this.state.mealInfo[i].mealDinner) dinner += this.state.mealInfo[i].amount;
+        for (let i = 0; i < tempInfo.length; i++) {
+            if (tempInfo[i].mealTime === 'Lunch') lunch += tempInfo[i].amount;
+            if (tempInfo[i].mealTime === 'Dinner') dinner += tempInfo[i].amount;
         }
+        this.setState({ amountLunch: lunch });
         this.setState({ amountDinner: dinner });
     }
 
@@ -357,37 +411,23 @@ class tiffinScreen extends Component {
                                 selectedValue={this.state.selectedMeal}
                                 style={{ height: 50, width: 110 }}
                                 onValueChange={(itemValue, itemIndex) => {
-                                    let temp = this.state;
-                                    temp.selectedMeal = itemValue;
-
-                                    switch (itemIndex) {
-                                        case 1:
-                                            mealName = 'Roti-sabji'
-                                            break;
-                                        case 2:
-                                            mealName = 'Chawal-dal'
-                                            break;
-                                        case 3:
-                                            mealName = 'mach-bhat'
-                                            break;
-                                        case 4:
-                                            mealName = 'murga-bhat'
-                                            break;
-                                    }
-
-                                    temp.mealId = mealName;
-                                    this.setState({ temp });
-                                    // console.log(itemIndex);
+                                    let temp = this.state.selectedMeal;
+                                    temp = itemValue;
+                                    this.setState({ selectedMeal: temp });
+                                    //  console.log(temp.selectedMeal);
                                 }}
                             >
-                                <Picker.Item label="Lists" value="kuchnai" />
-                                <Picker.Item label="Roti-sabji" value="30" />
-                                <Picker.Item label="Chawal-dal" value="35" />
-                                <Picker.Item label="mach-bhat" value="50" />
-                                <Picker.Item label="murga-bhat" value="60" />
+                                <Picker.Item label="Lists" value="" />
+                                <Picker.Item label="Roti-sabji  30" value="Roti-sabji" />
+                                <Picker.Item label="Chawal-dal  35" value="Chawal-dal" />
+                                <Picker.Item label="mach-bhat   50" value="mach-bhat" />
+                                <Picker.Item label="murga-bhat   60" value="murga-bhat" />
+                                <Picker.Item label="Litti-chokha   25" value="Litti-chokha" />
+                                <Picker.Item label="paneer-dosa   55" value="paneer-dosa" />
                             </Picker>
                         </View>
                     </View>
+
 
                     <View style={styles.boxStyle}>
 
@@ -436,32 +476,14 @@ class tiffinScreen extends Component {
 
                         {this.state.mealInfo.map((item) => {
                             return (
-                                <View key={item.date + item.mealDinner + item.mealLunch} style={{ flexDirection: 'row', textAlign: 30, justifyContent: 'space-around' }}>
+                                <View key={item.date + item.mealTime} style={{ flexDirection: 'row', textAlign: 30, justifyContent: 'space-around' }}>
                                     <Text style={{ margin: 10 }}>{item.date}</Text>
                                     <Text style={{ margin: 10 }}>{item.ID}</Text>
-                                    {item.mealLunch ? <Text style={{ margin: 10 }}>Lunch</Text> :
-                                        <Text style={{ margin: 10 }}>❌</Text>}
-                                    {item.mealDinner ? <Text style={{ margin: 10 }}>Dinner</Text> :
-                                        <Text style={{ margin: 10 }}>❌</Text>}
+                                    <Text style={{ margin: 10 }}>{item.mealTime}</Text>
+                                    <Text style={{ margin: 10 }}>Rs {item.amount}</Text>
                                 </View>
                             );
                         })}
-                        {/* <FlatList
-
-                            data={this.state.mealInfo}
-                            keyExtractor={item => item.date + item.mealType}
-                            renderItem={({ item }) => {
-                                return (
-                                    <View style={{ flexDirection: 'row', textAlign: 30, justifyContent: 'space-around' }}>
-                                        <Text style={{ margin: 10 }}>{item.date}</Text>
-                                        <Text style={{ margin: 10 }}>{item.ID}</Text>
-                                        {item.mealLunch ? <Text style={{ margin: 10 }}>Lunch</Text> :
-                                            <Text style={{ margin: 10 }}>❌</Text>}
-                                        {item.mealDinner ? <Text style={{ margin: 10 }}>Dinner</Text> :
-                                            <Text style={{ margin: 10 }}>❌</Text>}
-                                    </View>
-                                );
-                            }} /> */}
                     </View>
 
                 </ScrollView >
@@ -491,4 +513,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default tiffinScreen;
+export default messScreen;

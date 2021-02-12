@@ -66,6 +66,7 @@ export default class SigninScreen extends Component {
     }
 
     updateInputVal = (val, prop) => {
+        //  console.log(prop);
         const state = this.state;
         state[prop] = val;
         this.setState(state);
@@ -93,6 +94,14 @@ export default class SigninScreen extends Component {
                 })
                 .catch(error => this.setState({ errorMessage: error.message }))
         }
+    }
+
+    googleLogin = () => {
+        const googleAuth =
+            new firebase.auth.GoogleAuthProvider();
+
+        // using the object we will authenticate the user. 
+        firebase.auth().signInWithPopup(googleAuth);
     }
 
     render() {
@@ -127,6 +136,12 @@ export default class SigninScreen extends Component {
                     color="#3740FE"
                     title="Signin"
                     onPress={() => this.userLogin()}
+                />
+
+                <Button
+                    color="#3740FE"
+                    title="Signin with google"
+                    onPress={() => this.googleLogin()}
                 />
 
                 <Text
